@@ -1,0 +1,49 @@
+# Google CSS project 1
+
+## Script
+
+1. Intro
+    1. [PRACTICE] Google login fake page
+    1. [PRACTICE] Bad websites
+    1. [PRACTICE] Letters fake ([IDN homograph attack](https://en.wikipedia.org/wiki/IDN_homograph_attack))
+    1. [PRACTICE] Fake links
+    1. Fake emails (president@whitehouse.gov)
+    1. DISKLAIMER - don't use this for bad (find some law articles)
+1. Lil bit of theory
+    1. Some statistics
+    1. Human factor
+    1. Psychology
+    1. [PRACTICE] HTTP/HTTPS
+    1. WiFi - Evil twin
+    1. IoT hackable
+    1. IoT with default password attack
+    1. [PRACTICE] - Create (strong) password
+    1. [PRACTICE] OSINT - Personal data
+    1. Story about that Tea application
+1. Lil break
+    1. IDK, `pass`
+    1. Options
+        * Show hackertyper
+        * Worst movie hacking scenes
+        * But can it run DOOM?
+        * Worst examples (pwds on table etc)
+1. Info, that you were too shy to ask
+    1. Incognito
+    1. Web inspector
+    1. IP address, IPv4 vs IPv6
+    1. MFA
+    1. [PRACTICE] If computer was stolen - BitLocker - show RPi
+    1. Viruses - different kinds, how to secure yourself
+    1. GDPR
+        1. Find some interesting examples
+        1. Know your rights
+1. AI
+    1. Deepfakes
+    1. Process & Generate lots of data
+    1. [PRACTICE] Can you find out which one was written by AI
+    1. They learn on you
+        1. Directly
+        1. Indirectly (facebook, instagram)
+    1. How to use properly 
+1. How to be safe (todo today)
+1. Q&A
