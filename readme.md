@@ -14,6 +14,7 @@
 1. Lil bit of theory
     1. Some statistics
     1. Human factor
+        1. Silicon Valley password - https://www.youtube.com/watch?v=F6ySNAA_2Iw
     1. Psychology
     1. [PRACTICE] HTTP/HTTPS
     1. WiFi - Evil twin
@@ -55,6 +56,7 @@
     1. How to use properly
 1. How to be safe (todo today)
 1. Q&A
+1. Feedback
 
 
 ## Ideas
