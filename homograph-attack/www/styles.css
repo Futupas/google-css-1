@@ -1,0 +1,113 @@
+@import url('/arial.ttf');
+
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 0 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+h1, h2 {
+    text-align: center;
+    color: #005a9c;
+}
+h3 {
+    text-align: center;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+    margin-top: 25px;
+}
+.container {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}
+.box {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+}
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+input[type="text"] {
+    width: 95%;
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.char-codes {
+    word-wrap: break-word;
+    font-family: monospace;
+    background-color: #eee;
+    padding: 10px;
+    border-radius: 4px;
+    min-height: 50px;
+}
+.results {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #eef7ff;
+}
+.similarity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+.char-comparison {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+}
+.char-comparison .chars {
+    font-size: 1.1em;
+    white-space: nowrap;
+}
+.char-comparison .chars b {
+    font-weight: bold;
+}
+.char-comparison .chars span {
+    font-weight: normal;
+}
+.similarity-percent {
+    font-size: 0.9em;
+}
+.perfect-match {
+    background-color: #d4edda; /* Green */
+}
+.high-similarity {
+    background-color: #fff3cd; /* Yellow */
+}
+.no-match {
+    background-color: #f8d7da; /* Red */
+}
+.message {
+    text-align: center;
+    font-weight: bold;
+    color: #d9534f;
+    margin-top: 10px;
+}
+.overall-similarity {
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #d1e7fd;
+}
+.loader {
+    text-align: center;
+    font-size: 1.2em;
+    color: #005a9c;
+}

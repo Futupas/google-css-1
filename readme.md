@@ -71,3 +71,14 @@
     * But can it run DOOM?
     * Worst examples (pwds on table etc)
 
+
+## Practice examples
+
+1. Google login page
+1. same letters - IDN homograph attack (existing)
+    * https://futupas.github.io/homograph-attack-demonstrator
+1. fake links
+1. show fake email
+1. http/https
+1. strong password creation
+1. AI texts

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Homograph Attack Demonstrator</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <!-- Import opentype.js library from a CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/opentype.js@latest/dist/opentype.min.js"></script>
+</head>
+<body>
+
+    <h1>Advanced Homograph Attack Demonstrator</h1>
+    
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a href="https://futupas.github.io/homograph-attack-demonstrator/">futupas.github.io/homograph-attack-demonstrator</a>
+    </div>
+    
+    <div id="loader" class="loader">Loading Font...</div>
+
+    <div id="main-content" style="display: none;">
+        <div class="container">
+            <div class="box">
+                <label for="text1">Text 1 (e.g., Latin "a")</label>
+                <input type="text" id="text1" value="apple.com">
+                <h2>Character Codes</h2>
+                <div class="char-codes" id="char-codes1"></div>
+            </div>
+            <div class="box">
+                <label for="text2">Text 2 (e.g., Cyrillic "a")</label>
+                <input type="text" id="text2" value="аpple.com">
+                <h2>Character Codes</h2>
+                <div class="char-codes" id="char-codes2"></div>
+            </div>
+        </div>
+
+        <div class="results">
+            <h2>Analysis</h2>
+            <div id="message" class="message"></div>
+
+            <div id="analysis-results-visual">
+                <h3>Per-Character Visual Similarity (Vector Comparison)</h3>
+                <div id="similarity-grid-visual" class="similarity-grid"></div>
+                <div id="overall-similarity-visual" class="overall-similarity"></div>
+            </div>
+
+            <div id="analysis-results-code">
+                <h3>Per-Character Code Comparison (Binary Match)</h3>
+                <div id="similarity-grid-code" class="similarity-grid"></div>
+                <div id="overall-similarity-code" class="overall-similarity"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>
