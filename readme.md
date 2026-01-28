@@ -82,3 +82,6 @@
 1. http/https
 1. strong password creation
 1. AI texts
+
+## ToDo
+1. maybe tool for automatic page change
