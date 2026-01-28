@@ -5,10 +5,16 @@ services:
     container_name: web_desktop
     ports:
       - "6080:80"     # noVNC web interface (container 80 → host 6080)
-      - "8080:8080"   # Apache/PHP chat (container 8080 → host 8081)
+      - "8080:8080"   # Apache/PHP chat
+      - "8443:8443"   # Apache/PHP chat
       - "5901:5901"   # optional VNC access
     volumes:
       - ./www:/var/www/html  # your PHP chat files
+      - ./apache2/ports.conf:/etc/apache2/ports.conf:ro
+      - ./apache2/sites-available/000-default.conf:/etc/apache2/sites-available/000-default.conf:ro
+      - ./apache2/sites-available/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
+      # - ./apache2/ssl:/etc/apache2/ssl:ro
+      - ./apache2/apache2.conf:/etc/supervisor/conf.d/apache2.conf:ro
     environment:
       - VNC_PASSWORD=secret   # password for VNC access
     restart: unless-stopped
