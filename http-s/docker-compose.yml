@@ -9,6 +9,7 @@ services:
       - "8443:8443"   # Apache/PHP chat
       - "5901:5901"   # optional VNC access
       - "8765:8765"   # WebSocket
+      - "8766:8766"   # AJAX
     volumes:
       - ./www:/var/www/html  # your PHP chat files
       - ./apache2/ports.conf:/etc/apache2/ports.conf:ro
