@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+exit 1
+
 # --- 1. Start Apache config for HTTP + HTTPS ---
 # Enable SSL module
 a2enmod ssl

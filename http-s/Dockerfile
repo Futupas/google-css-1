@@ -16,7 +16,7 @@ RUN echo 'deb [trusted=yes] http://dl.google.com/linux/chrome/deb stable main' >
 #     sed -i 's/<VirtualHost \*:80>/<VirtualHost *:8080>/' /etc/apache2/sites-enabled/000-default.conf
 
 RUN apt-get update --allow-unauthenticated && \
-    apt-get install -y --allow-unauthenticated apache2 php wireshark tshark
+    apt-get install -y --allow-unauthenticated apache2 php wireshark tshark python3-pip
 
 RUN mkdir -p /etc/apache2/ssl && \
     openssl req -x509 -nodes -days 365 \
@@ -27,9 +27,12 @@ RUN mkdir -p /etc/apache2/ssl && \
 
 RUN a2enmod ssl && a2ensite default-ssl
 
-# Copy startup script
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+RUN pip3 install asyncio websockets
+# RUN pip3 install -r /opt/chat/requirements.txt
+
+# # Copy startup script
+# COPY start.sh /start.sh
+# RUN chmod +x /start.sh
 
 # Expose ports
 EXPOSE 80 8080 5901

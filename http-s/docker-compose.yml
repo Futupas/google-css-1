@@ -8,17 +8,20 @@ services:
       - "8080:8080"   # Apache/PHP chat
       - "8443:8443"   # Apache/PHP chat
       - "5901:5901"   # optional VNC access
+      - "8765:8765"   # WebSocket
     volumes:
       - ./www:/var/www/html  # your PHP chat files
       - ./apache2/ports.conf:/etc/apache2/ports.conf:ro
       - ./apache2/sites-available/000-default.conf:/etc/apache2/sites-available/000-default.conf:ro
       - ./apache2/sites-available/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
-      # - ./apache2/ssl:/etc/apache2/ssl:ro
-      - ./apache2/apache2.conf:/etc/supervisor/conf.d/apache2.conf:ro
+      - ./server.py:/opt/chat/server.py:ro
+      - ./requirements.txt:/opt/chat/requirements.txt
+      - ./supervisor/apache2.conf:/etc/supervisor/conf.d/apache2.conf:ro
+      - ./supervisor/chat-ws.conf:/etc/supervisor/conf.d/chat-ws.conf:ro
     environment:
       - VNC_PASSWORD=secret   # password for VNC access
     restart: unless-stopped
-    command: /start.sh
+    command: /startup.sh
     cap_add:
       - NET_ADMIN
       - NET_RAW
