@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <h1>Administrace</h1>
+    
+    <form action="{{ url_for('toggle') }}" method="post">
+        <button type="submit" style="background: {% if poll.is_open %}#ef4444{% else %}#10b981{% endif %};">
+            {% if poll.is_open %}Uzavřít hlasování{% else %}Otevřít hlasování{% endif %}
+        </button>
+    </form>
+
+    <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
+
+    <h2>Statistiky (Celkem: {{ total }})</h2>
+    {% for s in stats %}
+    <div class="progress-container">
+        <div class="stats-text">
+            <span>{{ s.label }} ({{ s.count }} hlasů)</span>
+            <span>{{ s.percent }}%</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: {{ s.percent }}%;"></div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
+
+    <h2>Nové hlasování</h2>
+    <form action="{{ url_for('setup') }}" method="post" id="poll-form">
+        <div class="input-group">
+            <label>Otázka:</label>
+            <input type="text" name="question" value="{{ poll.question }}">
+        </div>
+        <div id="options-container">
+            <label>Možnosti:</label>
+            {% for option in poll.options %}
+            <input type="text" name="options" value="{{ option }}" style="margin-bottom: 5px;">
+            {% endfor %}
+        </div>
+        <button type="button" onclick="addOption()" style="background: #666; margin-top: 10px;">+ Přidat možnost</button>
+        <button type="submit" style="margin-top: 20px;">Spustit nové hlasování</button>
+    </form>
+</div>
+
+<script>
+    function addOption() {
+        const container = document.getElementById('options-container');
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'options';
+        input.placeholder = 'Nová možnost ' + (container.querySelectorAll('input').length + 1);
+        input.style.marginBottom = '5px';
+        container.appendChild(input);
+    }
+</script>
+{% endblock %}
