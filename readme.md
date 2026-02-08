@@ -70,6 +70,7 @@
     * Worst movie hacking scenes
     * But can it run DOOM?
     * Worst examples (pwds on table etc)
+* curl https://ascii.live/rick
 
 
 ## Practice examples
@@ -84,4 +85,8 @@
 1. AI texts
 
 ## ToDo
-1. maybe tool for automatic page change
+2. voting system
+3. fake links
+4. strong password
+5. qr code creator (local only)
+
