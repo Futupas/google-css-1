@@ -85,9 +85,9 @@
 1. AI texts
 
 ## ToDo
-4. strong password
 5. qr code creator (local only)
 
-6. test EVERYTHING on light theme
-7. all ports to 80
+6. test EVERYTHING
+    * on light theme
+7. all ports to 80 (except for QnA and qr generator)
 8. overall orchestration (QnA)

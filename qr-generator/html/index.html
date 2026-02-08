@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            /* Midnight Dark Theme Colors */
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --accent: #6366f1;
+            --input-bg: #0f172a;
+            --border: #334155;
+            
+            /* Výchozí velikost (ovládaná JS) */
+            --qr-percent: 30; 
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            scroll-behavior: smooth;
+        }
+
+        /* Sekce pro zadávání */
+        .section-input {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid var(--border);
+        }
+
+        h1 { margin: 0 0 1rem 0; color: var(--accent); font-size: 2rem; }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 15px;
+            background: var(--input-bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            resize: none;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus { border-color: var(--accent); }
+
+        /* Nastavení velikosti */
+        .size-control {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .size-control label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        input[type=range] {
+            width: 100%;
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background-color: #4f46e5;
+            transform: translateY(-2px);
+        }
+
+        /* Sekce s QR kódem */
+        .section-qr {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #000; /* Čistá černá pro kontrast */
+            position: relative;
+        }
+
+        #qrcode {
+            background: white; /* QR kód musí být na bílé, aby byl čitelný */
+            padding: 30px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        /* Dynamická velikost QR kódu */
+        #qrcode img, #qrcode canvas {
+            width: calc(var(--qr-percent) * 1vh);
+            height: calc(var(--qr-percent) * 1vh);
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .info {
+            position: absolute;
+            bottom: 30px;
+            font-size: 0.9rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="section-input">
+        <div class="card">
+            <h1>QR Generator</h1>
+            
+            <textarea id="text-input" placeholder="Zadejte text nebo URL..."></textarea>
+            
+            <div class="size-control">
+                <label>Velikost QR kódu: <span id="size-val">50</span>% obrazovky</label>
+                <input type="range" id="size-slider" min="1" max="99" value="50" oninput="updateSize(this.value)" />
+            </div>
+
+            <button onclick="generateQR()">Generovat a zobrazit</button>
+        </div>
+    </div>
+
+    <div class="section-qr" id="result">
+        <div id="qrcode"></div>
+        <div class="info">Sjeďte nahoru pro změnu textu</div>
+    </div>
+
+    <script>
+        const qrContainer = document.getElementById("qrcode");
+        const sizeVal = document.getElementById("size-val");
+        const root = document.documentElement;
+
+        function updateSize(val) {
+            sizeVal.innerText = val;
+            root.style.setProperty('--qr-percent', val);
+        }
+
+        function generateQR() {
+            const text = document.getElementById("text-input").value;
+            if (!text) {
+                alert("Napište nějaký text!");
+                return;
+            }
+
+            qrContainer.innerHTML = "";
+
+            // Generujeme v pevném vysokém rozlišení (1000px), 
+            // CSS se postará o plynulé zmenšení/zvětšení podle slideru
+            new QRCode(qrContainer, {
+                text: text,
+                width: 1000,
+                height: 1000,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            // Scroll dolů na výsledek
+            setTimeout(() => {
+                document.getElementById('result').scrollIntoView();
+            }, 100);
+        }
+    </script>
+</body>
+</html>
