@@ -85,7 +85,6 @@
 1. AI texts
 
 ## ToDo
-2. voting system
 3. fake links
 4. strong password
 5. qr code creator (local only)
