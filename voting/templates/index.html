@@ -1,15 +1,73 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="card">
-    <h1>{{ poll.question }}</h1>
-    {% if poll.is_open %}
-        {% for option in poll.options %}
-        <form action="{{ url_for('vote', option_id=loop.index0) }}" method="post">
-            <button type="submit">{{ option }}</button>
-        </form>
-        {% endfor %}
-    {% else %}
-        <p style="color: #888;">Hlasování je momentálně uzavřeno.</p>
-    {% endif %}
+<div class="full-page">
+    <div class="card">
+        {% if poll.is_open %}
+            <h1 id="user-q">{{ poll.question }}</h1>
+            <div id="vote-options">
+                {% for option in poll.options %}
+                <form action="{{ url_for('vote', option_id=loop.index0) }}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-vote {% if session.get('voted_' ~ poll.id) == loop.index0 %}btn-active{% endif %}">
+                        {{ option }}
+                    </button>
+                </form>
+                {% endfor %}
+            </div>
+        {% else %}
+            <h1>Hlasování zatím neběží</h1>
+            <p>Sledujte obrazovku, brzy začneme.</p>
+        {% endif %}
+    </div>
 </div>
+
+<div class="full-page" id="results-view" style="background: #000;">
+    <h1 id="results-q" style="margin-bottom: 40px;">{{ poll.question if poll.is_open else "" }}</h1>
+    <div style="width: 80%; height: 70vh;">
+        <canvas id="bigChart"></canvas>
+    </div>
+    <h2 id="total-count" style="margin-top: 20px; opacity: 0.7;"></h2>
+</div>
+
+<script>
+    let myChart;
+    async function updateStats() {
+        const res = await fetch('/api/data');
+        const data = await res.json();
+        
+        if (!data.is_open) return;
+
+        const labels = data.stats.map(s => s.label);
+        const values = data.stats.map(s => s.count);
+        const labelsWithPerc = data.stats.map(s => `${s.label} (${s.percent}%)`);
+
+        document.getElementById('total-count').innerText = `Celkem hlasů: ${data.total}`;
+        document.getElementById('results-q').innerText = data.question;
+
+        if (!myChart) {
+            const ctx = document.getElementById('bigChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labelsWithPerc,
+                    datasets: [{ data: values, backgroundColor: '#4f46e5', borderRadius: 10 }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        x: { grid: { display: false }, ticks: { color: '#fff', font: {size: 18} } },
+                        y: { ticks: { color: '#fff', font: {size: 20} } }
+                    }
+                }
+            });
+        } else {
+            myChart.data.labels = labelsWithPerc;
+            myChart.data.datasets[0].data = values;
+            myChart.update('none');
+        }
+    }
+    setInterval(updateStats, 1000);
+</script>
 {% endblock %}

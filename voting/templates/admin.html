@@ -1,57 +1,68 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="card">
-    <h1>Administrace</h1>
-    
-    <form action="{{ url_for('toggle') }}" method="post">
-        <button type="submit" style="background: {% if poll.is_open %}#ef4444{% else %}#10b981{% endif %};">
-            {% if poll.is_open %}Uzavřít hlasování{% else %}Otevřít hlasování{% endif %}
-        </button>
-    </form>
-
-    <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
-
-    <h2>Statistiky (Celkem: {{ total }})</h2>
-    {% for s in stats %}
-    <div class="progress-container">
-        <div class="stats-text">
-            <span>{{ s.label }} ({{ s.count }} hlasů)</span>
-            <span>{{ s.percent }}%</span>
-        </div>
-        <div class="progress-bar">
-            <div class="progress-fill" style="width: {{ s.percent }}%;"></div>
-        </div>
+<div class="full-page">
+    <div class="card" style="max-width: 800px;">
+        <h1>Ovládání hlasování</h1>
+        
+        {% if not poll.is_open %}
+        <form action="{{ url_for('admin_action') }}" method="post">
+            <input type="hidden" name="action" value="start">
+            <div style="text-align: left; margin-bottom: 20px;">
+                <label>Otázka:</label>
+                <input type="text" name="question" value="Který text vytvořila AI?" style="width:100%; padding:12px; margin:10px 0; border-radius:8px; background:#0b0f19; border:1px solid #333; color:white;">
+                
+                <label>Možnosti:</label>
+                <div id="opts">
+                    <input type="text" name="options" value="Text 1" style="width:100%; padding:10px; margin-bottom:5px; border-radius:8px; background:#0b0f19; border:1px solid #333; color:white;">
+                    <input type="text" name="options" value="Text 2" style="width:100%; padding:10px; margin-bottom:5px; border-radius:8px; background:#0b0f19; border:1px solid #333; color:white;">
+                </div>
+                <button type="button" onclick="add()" style="background:#333; margin-top:5px; padding:5px 10px; font-size:0.8rem;">+ Další možnost</button>
+            </div>
+            <button type="submit" style="background:var(--success); width:100%;" onclick="window.scrollTo(0, document.body.scrollHeight);">SPUSTIT HLASOVÁNÍ</button>
+        </form>
+        {% else %}
+        <form action="{{ url_for('admin_action') }}" method="post">
+            <input type="hidden" name="action" value="stop">
+            <h2 style="color:var(--success)">● Probíhá hlasování: {{ poll.question }}</h2>
+            <button type="submit" style="background:var(--danger); width:100%;">ZASTAVIT A UZAVŘÍT</button>
+        </form>
+        {% endif %}
     </div>
-    {% endfor %}
+</div>
 
-    <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border);">
-
-    <h2>Nové hlasování</h2>
-    <form action="{{ url_for('setup') }}" method="post" id="poll-form">
-        <div class="input-group">
-            <label>Otázka:</label>
-            <input type="text" name="question" value="{{ poll.question }}">
-        </div>
-        <div id="options-container">
-            <label>Možnosti:</label>
-            {% for option in poll.options %}
-            <input type="text" name="options" value="{{ option }}" style="margin-bottom: 5px;">
-            {% endfor %}
-        </div>
-        <button type="button" onclick="addOption()" style="background: #666; margin-top: 10px;">+ Přidat možnost</button>
-        <button type="submit" style="margin-top: 20px;">Spustit nové hlasování</button>
-    </form>
+<!-- Stats div below -->
+<div class="full-page" style="background: #000;">
+    <h1>Živé výsledky</h1>
+    <div style="width: 90%; height: 70vh;">
+        <canvas id="adminChart"></canvas>
+    </div>
 </div>
 
 <script>
-    function addOption() {
-        const container = document.getElementById('options-container');
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.name = 'options';
-        input.placeholder = 'Nová možnost ' + (container.querySelectorAll('input').length + 1);
-        input.style.marginBottom = '5px';
-        container.appendChild(input);
+    function add() {
+        const i = document.createElement('input');
+        i.name = 'options';
+        i.style = "width:100%; padding:10px; margin-bottom:5px; border-radius:8px; background:#0b0f19; border:1px solid #333; color:white;";
+        i.placeholder = "Nová možnost";
+        document.getElementById('opts').appendChild(i);
     }
+
+    let chart;
+    async function refresh() {
+        const r = await fetch('/api/data');
+        const d = await r.json();
+        if (!chart) {
+            chart = new Chart(document.getElementById('adminChart'), {
+                type: 'bar',
+                data: { labels: d.stats.map(s=>s.label), datasets: [{data: d.stats.map(s=>s.count), backgroundColor: '#10b981'}] },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: {legend:{display:false}}}
+            });
+        } else {
+            chart.data.labels = d.stats.map(s=>s.label);
+            chart.data.datasets[0].data = d.stats.map(s=>s.count);
+            chart.update();
+        }
+    }
+    setInterval(refresh, 1000);
 </script>
 {% endblock %}
