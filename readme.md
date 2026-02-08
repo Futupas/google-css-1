@@ -87,6 +87,7 @@
 ## ToDo
 4. strong password
 5. qr code creator (local only)
+
 6. test EVERYTHING on light theme
 7. all ports to 80
-
+8. overall orchestration (QnA)

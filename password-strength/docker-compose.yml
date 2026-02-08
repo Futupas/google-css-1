@@ -1,0 +1,7 @@
+services:
+  password-evaluator:
+    build: .
+    container_name: zxcvbn-checker
+    ports:
+      - "8080:5000"
+    restart: unless-stopped
