@@ -85,8 +85,8 @@
 1. AI texts
 
 ## ToDo
-3. fake links
 4. strong password
 5. qr code creator (local only)
 6. test EVERYTHING on light theme
+7. all ports to 80
 
