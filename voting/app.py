@@ -6,76 +6,102 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY', 'tajny-klic-123')
+app.secret_key = os.getenv('SECRET_KEY', 'devops-is-cool-2024')
 
-# --- GLOBÁLNÍ STAV ---
-poll = {
-    "id": str(uuid.uuid4()), # Unikátní ID kola
-    "question": "Který text vytvořila AI?",
-    "options": ["Text 1", "Text 2"],
-    "votes": [0, 0],
-    "is_open": False
+# --- DATASET ---
+QUESTIONS = [
+    {
+        "id": "Q1",
+        "options": [
+            {"text": "V hlubokém lese šeptá vítr staré příběhy. Listí stromů se jemně chvěje v nekonečném tanci světla a stínu, zatímco mechový koberec pod nohama tlumí každý krok poutníka, který se odvážil vstoupit do těchto zapomenutých míst, kde čas jako by přestal existovat.", "ai": False},
+            {"text": "Detekována anomálie v atmosférickém tlaku. Generování narativní struktury bylo dokončeno s vysokou mírou pravděpodobnosti úspěchu. Algoritmy optimalizovaly sémantickou hustotu textu pro dosažení maximální odezvy u cílové skupiny uživatelů.", "ai": True}
+        ]
+    },
+    {
+        "id": "Q2",
+        "options": [
+            {"text": "Dnes ráno jsem vstal a uvědomil si, že jsem zapomněl vypnout kávovar. Ta vůně spálených zrn se táhla celým bytem jako nechtěná připomínka mé ranní roztržitosti, kterou se snažím maskovat před kolegy v práci už několik let.", "ai": False},
+            {"text": "Kávový extrakt byl připraven v souladu s nastavenými parametry teploty a tlaku. Systém zaznamenal překročení časového limitu ohřevu, což vedlo k uvolnění aromatických uhlovodíků spojených s procesem oxidace organických látek.", "ai": True}
+        ]
+    }
+]
+
+state = {
+    "index": 0,
+    "phase": "voting", # "voting" | "results"
+    "votes": [],
+    "poll_id": str(uuid.uuid4())
 }
+
+def init_q():
+    state["votes"] = [0] * len(QUESTIONS[state["index"]]["options"])
+    state["poll_id"] = str(uuid.uuid4())
+
+init_q()
 
 def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         auth = request.authorization
         if not auth or not (auth.username == os.getenv('ADMIN_USER') and auth.password == os.getenv('ADMIN_PASS')):
-            return Response('Přihlašte se.', 401, {'WWW-Authenticate': 'Basic realm="Admin"'})
+            return Response('Login', 401, {'WWW-Authenticate': 'Basic realm="Admin"'})
         return f(*args, **kwargs)
     return decorated
 
 @app.route('/')
 def index():
-    return render_template('index.html', poll=poll)
+    return render_template('index.html', q=QUESTIONS[state["index"]], state=state)
 
-@app.route('/api/data')
-def get_data():
-    total = sum(poll['votes'])
-    stats = []
-    for i, count in enumerate(poll['votes']):
-        percent = round((count / total * 100), 2) if total > 0 else 0
-        stats.append({"label": poll['options'][i], "count": count, "percent": percent})
-    return jsonify({"stats": stats, "total": total, "is_open": poll['is_open'], "question": poll['question']})
+@app.route('/api/state')
+def get_state():
+    q = QUESTIONS[state["index"]]
+    correct_indices = [i for i, opt in enumerate(q["options"]) if opt["ai"]]
+    return jsonify({
+        "phase": state["phase"],
+        "correct_indices": correct_indices if state["phase"] == "results" else [],
+        "poll_id": state["poll_id"],
+        "q_id": q["id"]
+    })
 
-@app.route('/vote/<int:option_id>', methods=['POST'])
-def vote(option_id):
-    if not poll['is_open']: return redirect(url_for('index'))
-    
-    # Každé kolo hlasování má své ID v session
-    session_key = f"voted_{poll['id']}"
-    prev_vote = session.get(session_key)
+@app.route('/api/stats')
+@requires_auth
+def get_stats():
+    total = sum(state["votes"])
+    q = QUESTIONS[state["index"]]
+    correct_votes = sum(state["votes"][i] for i, opt in enumerate(q["options"]) if opt["ai"])
+    return jsonify({
+        "votes": state["votes"],
+        "labels": [f"TEXT {i+1}" for i in range(len(state["votes"]))],
+        "accuracy": f"{correct_votes}/{total} ({round(correct_votes/total*100,1) if total>0 else 0}%)",
+        "phase": state["phase"],
+        "correct_indices": [i for i, opt in enumerate(q['options']) if opt['ai']]
+    })
 
-    if prev_vote is not None:
-        poll['votes'][prev_vote] -= 1 # Odečíst starý hlas
-    
-    poll['votes'][option_id] += 1
-    session[session_key] = option_id # Uložit nový hlas
-    session.modified = True
+@app.route('/vote/<int:oid>', methods=['POST'])
+def vote(oid):
+    if state["phase"] != "voting": return redirect(url_for('index'))
+    key = f"v_{state['poll_id']}"
+    if key in session: state["votes"][session[key]] -= 1
+    state["votes"][oid] += 1
+    session[key] = oid
     return redirect(url_for('index'))
+
+@app.route('/admin/nav/<action>')
+@requires_auth
+def navigate(action):
+    if action == "next": state["index"] = (state["index"] + 1) % len(QUESTIONS)
+    elif action == "prev": state["index"] = (state["index"] - 1) % len(QUESTIONS)
+    elif action == "toggle": state["phase"] = "results" if state["phase"] == "voting" else "voting"
+    
+    if action in ["next", "prev"]:
+        state["phase"] = "voting"
+        init_q()
+    return redirect(url_for('admin'))
 
 @app.route('/admin')
 @requires_auth
 def admin():
-    return render_template('admin.html', poll=poll)
-
-@app.route('/admin/action', methods=['POST'])
-@requires_auth
-def admin_action():
-    action = request.form.get('action')
-    
-    if action == "start":
-        # RESET VŠEHO
-        poll['id'] = str(uuid.uuid4())
-        poll['question'] = request.form.get('question', 'Který text vytvořila AI?')
-        poll['options'] = [o for o in request.form.getlist('options') if o.strip()]
-        poll['votes'] = [0] * len(poll['options'])
-        poll['is_open'] = True
-    elif action == "stop":
-        poll['is_open'] = False
-        
-    return redirect(url_for('admin'))
+    return render_template('admin.html', q=QUESTIONS[state["index"]], state=state)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

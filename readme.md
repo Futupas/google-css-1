@@ -89,4 +89,5 @@
 3. fake links
 4. strong password
 5. qr code creator (local only)
+6. test EVERYTHING on light theme
 

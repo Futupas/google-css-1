@@ -1,68 +1,69 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="full-page">
-    <div class="card" style="max-width: 800px;">
-        <h1>Ovládání hlasování</h1>
-        
-        {% if not poll.is_open %}
-        <form action="{{ url_for('admin_action') }}" method="post">
-            <input type="hidden" name="action" value="start">
-            <div style="text-align: left; margin-bottom: 20px;">
-                <label>Otázka:</label>
-                <input type="text" name="question" value="Který text vytvořila AI?" style="width:100%; padding:12px; margin:10px 0; border-radius:8px; background:#0b0f19; border:1px solid #333; color:white;">
-                
-                <label>Možnosti:</label>
-                <div id="opts">
-                    <input type="text" name="options" value="Text 1" style="width:100%; padding:10px; margin-bottom:5px; border-radius:8px; background:#0b0f19; border:1px solid #333; color:white;">
-                    <input type="text" name="options" value="Text 2" style="width:100%; padding:10px; margin-bottom:5px; border-radius:8px; background:#0b0f19; border:1px solid #333; color:white;">
-                </div>
-                <button type="button" onclick="add()" style="background:#333; margin-top:5px; padding:5px 10px; font-size:0.8rem;">+ Další možnost</button>
-            </div>
-            <button type="submit" style="background:var(--success); width:100%;" onclick="window.scrollTo(0, document.body.scrollHeight);">SPUSTIT HLASOVÁNÍ</button>
-        </form>
-        {% else %}
-        <form action="{{ url_for('admin_action') }}" method="post">
-            <input type="hidden" name="action" value="stop">
-            <h2 style="color:var(--success)">● Probíhá hlasování: {{ poll.question }}</h2>
-            <button type="submit" style="background:var(--danger); width:100%;">ZASTAVIT A UZAVŘÍT</button>
-        </form>
-        {% endif %}
+    <div style="margin-bottom: 30px;">
+        <a href="/admin/nav/prev" class="btn-nav secondary">← PŘEDCHOZÍ</a>
+        <a href="/admin/nav/toggle" class="btn-nav">
+            {% if state.phase == 'voting' %}ODHALIT VÝSLEDKY{% else %}ZPĚT K HLASOVÁNÍ{% endif %}
+        </a>
+        <a href="/admin/nav/next" class="btn-nav secondary">DALŠÍ →</a>
     </div>
-</div>
 
-<!-- Stats div below -->
-<div class="full-page" style="background: #000;">
-    <h1>Živé výsledky</h1>
-    <div style="width: 90%; height: 70vh;">
-        <canvas id="adminChart"></canvas>
+    <div class="card" style="max-width: 1000px; text-align: center;">
+        <span class="q-badge">ADMIN PANEL - {{ q.id }}</span>
+        <h1 id="accuracy-title" style="font-size: 4rem; margin: 10px 0;">???</h1>
+        <p style="text-transform: uppercase; letter-spacing: 2px; opacity: 0.7;">Úspěšnost skupiny</p>
+        
+        <div style="height: 400px; margin-top: 30px;">
+            <canvas id="adminChart"></canvas>
+        </div>
+    </div>
+
+    <div style="margin-top: 40px; width: 100%; max-width: 900px; opacity: 0.8;">
+        <h3>Náhled textů (Otázka {{ q.id }}):</h3>
+        {% for o in q.options %}
+            <div style="padding: 10px; border-left: 4px solid {% if o.ai %}var(--ai){% else %}#334155{% endif %}; margin-bottom: 10px; background: rgba(255,255,255,0.03);">
+                <strong>Text {{ loop.index }}:</strong> {{ o.text[:150] }}... {% if o.ai %}<strong>(AI)</strong>{% endif %}
+            </div>
+        {% endfor %}
     </div>
 </div>
 
 <script>
-    function add() {
-        const i = document.createElement('input');
-        i.name = 'options';
-        i.style = "width:100%; padding:10px; margin-bottom:5px; border-radius:8px; background:#0b0f19; border:1px solid #333; color:white;";
-        i.placeholder = "Nová možnost";
-        document.getElementById('opts').appendChild(i);
-    }
-
     let chart;
-    async function refresh() {
-        const r = await fetch('/api/data');
+    async function updateStats() {
+        const r = await fetch('/api/stats');
         const d = await r.json();
+        
+        document.getElementById('accuracy-title').innerText = d.phase === 'results' ? d.accuracy : "???";
+
+        const bgColors = d.votes.map((_, i) => {
+            if (d.phase === 'results') {
+                return d.correct_indices.includes(i) ? '#10b981' : '#ef4444';
+            }
+            return '#6366f1';
+        });
+
         if (!chart) {
             chart = new Chart(document.getElementById('adminChart'), {
                 type: 'bar',
-                data: { labels: d.stats.map(s=>s.label), datasets: [{data: d.stats.map(s=>s.count), backgroundColor: '#10b981'}] },
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: {legend:{display:false}}}
+                data: { labels: d.labels, datasets: [{ data: d.votes, backgroundColor: bgColors, borderRadius: 10 }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
+                        x: { ticks: { color: '#fff', font: { size: 16, weight: 'bold' } }, grid: { display: false } }
+                    }
+                }
             });
         } else {
-            chart.data.labels = d.stats.map(s=>s.label);
-            chart.data.datasets[0].data = d.stats.map(s=>s.count);
+            chart.data.labels = d.labels;
+            chart.data.datasets[0].data = d.votes;
+            chart.data.datasets[0].backgroundColor = bgColors;
             chart.update();
         }
     }
-    setInterval(refresh, 1000);
+    setInterval(updateStats, 1500);
 </script>
 {% endblock %}
