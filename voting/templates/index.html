@@ -5,47 +5,96 @@
         <span class="q-badge">{{ q.id }}</span>
         <h1 style="margin-top: 0;">Který text vytvořila AI?</h1>
         
+        {# Načtení počátečního stavu ze session při loadu stránky #}
         {% set user_vote = session.get('voted_' ~ state.poll_id) %}
         
         <div id="options-container">
             {% for opt in q.options %}
-            <form action="{{ url_for('vote', oid=loop.index0) }}" method="post">
-                <button type="submit" 
-                    class="option-btn {% if user_vote == loop.index0 %}selected{% endif %}" 
-                    {% if state.phase == 'results' %}disabled{% endif %}>
-                    {{ opt.text }}
-                </button>
-            </form>
+            {# Používáme běžný button s onclick funkcí místo formuláře #}
+            <button type="button" 
+                id="btn-{{ loop.index0 }}"
+                onclick="submitVote({{ loop.index0 }})"
+                class="option-btn {% if user_vote == loop.index0 %}selected{% endif %}" 
+                {% if state.phase == 'results' %}disabled{% endif %}>
+                {{ opt.text }}
+            </button>
             {% endfor %}
         </div>
-        <div id="status-msg" style="text-align: center; font-weight: bold; margin-top: 20px; min-height: 1.6em;"></div>
+        <div id="status-msg" style="text-align: center; font-weight: bold; margin-top: 20px; font-size: 1.4rem; min-height: 1.6em;"></div>
     </div>
 </div>
 
 <script>
     const pollId = "{{ state.poll_id }}";
-    const userVote = "{{ user_vote if user_vote != None else 'None' }}";
+    let currentUserVote = {{ user_vote if user_vote != None else 'null' }};
+
+    async function submitVote(optionId) {
+        if (document.getElementById(`btn-${optionId}`).disabled) return;
+
+        try {
+            const response = await fetch(`/vote/${optionId}`, { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            if (response.ok) {
+                document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+                document.getElementById(`btn-${optionId}`).classList.add('selected');
+                currentUserVote = optionId;
+            }
+        } catch (e) {
+            console.error("Chyba při odesílání hlasu:", e);
+        }
+    }
 
     async function checkState() {
         const r = await fetch('/api/state');
         const d = await r.json();
         
-        if (d.poll_id !== pollId) { location.reload(); }
+        // 1. Změna otázky -> Úplný reload
+        if (d.poll_id !== pollId) { 
+            location.reload(); 
+            return;
+        }
 
+        const statusMsg = document.getElementById('status-msg');
+        const buttons = document.querySelectorAll('.option-btn');
+
+        // 2. Fáze VÝSLEDKŮ
         if (d.phase === 'results') {
-            document.querySelectorAll('.option-btn').forEach((btn, i) => {
+            buttons.forEach((btn, i) => {
                 btn.disabled = true;
                 if (d.correct_indices.includes(i)) {
                     btn.classList.add('correct');
-                    if (userVote == i) document.getElementById('status-msg').innerHTML = "✅ SPRÁVNĚ! Odhalil jste AI.";
-                } else if (userVote == i) {
+                    if (currentUserVote === i) {
+                        statusMsg.innerHTML = "✅ SPRÁVNĚ! Odhalil jste AI.";
+                        statusMsg.style.color = "var(--ai)";
+                    }
+                } else if (currentUserVote === i) {
                     btn.classList.add('wrong');
-                    document.getElementById('status-msg').innerHTML = "❌ CHYBA! Toto napsal člověk.";
+                    statusMsg.innerHTML = "❌ CHYBA! Toto napsal člověk.";
+                    statusMsg.style.color = "var(--wrong)";
                 }
             });
-            if (userVote === 'None') document.getElementById('status-msg').innerText = "Hlasování skončilo.";
+            if (currentUserVote === null && !statusMsg.innerText) {
+                statusMsg.innerText = "Hlasování skončilo.";
+            }
+        } 
+        // 3. NÁVRAT DO FÁZE HLASOVÁNÍ (Tohle je ta oprava)
+        else if (d.phase === 'voting') {
+            statusMsg.innerText = ""; // Vymazat zprávu
+            buttons.forEach((btn, i) => {
+                btn.disabled = false; // Povolit tlačítka
+                btn.classList.remove('correct', 'wrong'); // Odstranit barvy výsledků
+                
+                // Zachovat zvýraznění toho, co uživatel vybral
+                if (currentUserVote === i) {
+                    btn.classList.add('selected');
+                }
+            });
         }
     }
+
     setInterval(checkState, 2000);
 </script>
 {% endblock %}

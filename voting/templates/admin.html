@@ -11,6 +11,7 @@
 
     <div class="card" style="max-width: 1000px; text-align: center;">
         <span class="q-badge">ADMIN PANEL - {{ q.id }}</span>
+        <h1 style="margin-top: 0;">Který text vytvořila AI?</h1>
         
         <!-- Skryté statistiky během hlasování -->
         <div id="stats-header" style="visibility: hidden;">
@@ -72,7 +73,7 @@
                     plugins: { legend: { display: false } },
                     scales: {
                         y: { beginAtZero: true, ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
-                        x: { ticks: { color: '#fff', font: { size: 14 } }, grid: { display: false } }
+                        x: { ticks: { color: '#fff', font: { size: 20 } }, grid: { display: false } }
                     }
                 }
             });
