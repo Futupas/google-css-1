@@ -12,14 +12,13 @@
             <form action="{{ url_for('vote', oid=loop.index0) }}" method="post">
                 <button type="submit" 
                     class="option-btn {% if user_vote == loop.index0 %}selected{% endif %}" 
-                    id="btn-{{loop.index0}}"
                     {% if state.phase == 'results' %}disabled{% endif %}>
                     {{ opt.text }}
                 </button>
             </form>
             {% endfor %}
         </div>
-        <div id="status-msg" style="text-align: center; font-weight: bold; margin-top: 20px;"></div>
+        <div id="status-msg" style="text-align: center; font-weight: bold; margin-top: 20px; min-height: 1.6em;"></div>
     </div>
 </div>
 
@@ -44,7 +43,7 @@
                     document.getElementById('status-msg').innerHTML = "❌ CHYBA! Toto napsal člověk.";
                 }
             });
-            if (userVote === 'None') document.getElementById('status-msg').innerText = "Hlasování skončilo (nehlasoval jste).";
+            if (userVote === 'None') document.getElementById('status-msg').innerText = "Hlasování skončilo.";
         }
     }
     setInterval(checkState, 2000);

@@ -6,29 +6,32 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY', 'devops-is-cool-2024')
+app.secret_key = os.getenv('SECRET_KEY', 'default-key-for-dev')
+
+# --- KONFIGURACE ---
+LABEL_LIMIT = 40  # Kolik znaků z textu se ukáže v popisku grafu
 
 # --- DATASET ---
 QUESTIONS = [
     {
         "id": "Q1",
         "options": [
-            {"text": "V hlubokém lese šeptá vítr staré příběhy. Listí stromů se jemně chvěje v nekonečném tanci světla a stínu, zatímco mechový koberec pod nohama tlumí každý krok poutníka, který se odvážil vstoupit do těchto zapomenutých míst, kde čas jako by přestal existovat.", "ai": False},
-            {"text": "Detekována anomálie v atmosférickém tlaku. Generování narativní struktury bylo dokončeno s vysokou mírou pravděpodobnosti úspěchu. Algoritmy optimalizovaly sémantickou hustotu textu pro dosažení maximální odezvy u cílové skupiny uživatelů.", "ai": True}
+            {"text": "V hlubokém lese šeptá vítr staré příběhy. Listí stromů se jemně chvěje v nekonečném tanci světla a stínu, zatímco mechový koberec pod nohama tlumí každý krok.", "ai": False},
+            {"text": "Detekována anomálie v atmosférickém tlaku. Generování narativní struktury bylo dokončeno s vysokou mírou pravděpodobnosti úspěchu u cílové skupiny.", "ai": True}
         ]
     },
     {
         "id": "Q2",
         "options": [
-            {"text": "Dnes ráno jsem vstal a uvědomil si, že jsem zapomněl vypnout kávovar. Ta vůně spálených zrn se táhla celým bytem jako nechtěná připomínka mé ranní roztržitosti, kterou se snažím maskovat před kolegy v práci už několik let.", "ai": False},
-            {"text": "Kávový extrakt byl připraven v souladu s nastavenými parametry teploty a tlaku. Systém zaznamenal překročení časového limitu ohřevu, což vedlo k uvolnění aromatických uhlovodíků spojených s procesem oxidace organických látek.", "ai": True}
+            {"text": "Dnes ráno jsem vstal a uvědomil si, že jsem zapomněl vypnout kávovar. Ta vůně spálených zrn se táhla celým bytem jako nechtěná připomínka mé ranní roztržitosti.", "ai": False},
+            {"text": "Kávový extrakt byl připraven v souladu s nastavenými parametry teploty a tlaku. Systém zaznamenal překročení časového limitu ohřevu organických látek.", "ai": True}
         ]
     }
 ]
 
 state = {
     "index": 0,
-    "phase": "voting", # "voting" | "results"
+    "phase": "voting", 
     "votes": [],
     "poll_id": str(uuid.uuid4())
 }
@@ -55,10 +58,9 @@ def index():
 @app.route('/api/state')
 def get_state():
     q = QUESTIONS[state["index"]]
-    correct_indices = [i for i, opt in enumerate(q["options"]) if opt["ai"]]
     return jsonify({
         "phase": state["phase"],
-        "correct_indices": correct_indices if state["phase"] == "results" else [],
+        "correct_indices": [i for i, opt in enumerate(q["options"]) if opt["ai"]] if state["phase"] == "results" else [],
         "poll_id": state["poll_id"],
         "q_id": q["id"]
     })
@@ -69,9 +71,13 @@ def get_stats():
     total = sum(state["votes"])
     q = QUESTIONS[state["index"]]
     correct_votes = sum(state["votes"][i] for i, opt in enumerate(q["options"]) if opt["ai"])
+    
+    # Dynamické popisky grafu (N znaků)
+    labels = [opt["text"][:LABEL_LIMIT] + "..." for opt in q["options"]]
+    
     return jsonify({
         "votes": state["votes"],
-        "labels": [f"TEXT {i+1}" for i in range(len(state["votes"]))],
+        "labels": labels,
         "accuracy": f"{correct_votes}/{total} ({round(correct_votes/total*100,1) if total>0 else 0}%)",
         "phase": state["phase"],
         "correct_indices": [i for i, opt in enumerate(q['options']) if opt['ai']]
@@ -84,6 +90,7 @@ def vote(oid):
     if key in session: state["votes"][session[key]] -= 1
     state["votes"][oid] += 1
     session[key] = oid
+    session.modified = True
     return redirect(url_for('index'))
 
 @app.route('/admin/nav/<action>')

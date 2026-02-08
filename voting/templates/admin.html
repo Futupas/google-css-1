@@ -11,23 +11,34 @@
 
     <div class="card" style="max-width: 1000px; text-align: center;">
         <span class="q-badge">ADMIN PANEL - {{ q.id }}</span>
-        <h1 id="accuracy-title" style="font-size: 4rem; margin: 10px 0;">???</h1>
-        <p style="text-transform: uppercase; letter-spacing: 2px; opacity: 0.7;">Úspěšnost skupiny</p>
         
-        <div style="height: 400px; margin-top: 30px;">
+        <!-- Skryté statistiky během hlasování -->
+        <div id="stats-header" style="visibility: hidden;">
+            <h1 id="accuracy-title" style="font-size: 4rem; margin: 10px 0;">???</h1>
+            <p style="text-transform: uppercase; letter-spacing: 2px; opacity: 0.7;">Úspěšnost skupiny</p>
+        </div>
+        
+        <div style="height: 400px; margin-top: 10px;">
             <canvas id="adminChart"></canvas>
         </div>
     </div>
 
-    <div style="margin-top: 40px; width: 100%; max-width: 900px; opacity: 0.8;">
-        <h3>Náhled textů (Otázka {{ q.id }}):</h3>
+    <div style="margin-top: 40px; width: 100%; max-width: 900px;">
+        <h3 style="opacity:0.6">Náhled textů (Otázka {{ q.id }}):</h3>
         {% for o in q.options %}
-            <div style="padding: 10px; border-left: 4px solid {% if o.ai %}var(--ai){% else %}#334155{% endif %}; margin-bottom: 10px; background: rgba(255,255,255,0.03);">
-                <strong>Text {{ loop.index }}:</strong> {{ o.text[:150] }}... {% if o.ai %}<strong>(AI)</strong>{% endif %}
+            <!-- AI se zvýrazní JEN ve fázi Results -->
+            <div style="padding: 15px; border-left: 4px solid #334155; margin-bottom: 10px; background: rgba(255,255,255,0.03); border-radius: 4px;" 
+                 class="preview-text {% if o.ai %}ai-secret{% endif %}">
+                <strong>Text {{ loop.index }}:</strong> {{ o.text }}
             </div>
         {% endfor %}
     </div>
 </div>
+
+<style>
+    /* Speciální třída pro skrytí AI označení před adminem (volitelné, pokud to chce mít jako překvapení i pro sebe) */
+    .results-active .ai-secret { border-color: var(--ai) !important; background: rgba(16, 185, 129, 0.05) !important; }
+</style>
 
 <script>
     let chart;
@@ -35,7 +46,15 @@
         const r = await fetch('/api/stats');
         const d = await r.json();
         
-        document.getElementById('accuracy-title').innerText = d.phase === 'results' ? d.accuracy : "???";
+        const header = document.getElementById('stats-header');
+        if (d.phase === 'results') {
+            header.style.visibility = 'visible';
+            document.getElementById('accuracy-title').innerText = d.accuracy;
+            document.body.classList.add('results-active');
+        } else {
+            header.style.visibility = 'hidden';
+            document.body.classList.remove('results-active');
+        }
 
         const bgColors = d.votes.map((_, i) => {
             if (d.phase === 'results') {
@@ -53,7 +72,7 @@
                     plugins: { legend: { display: false } },
                     scales: {
                         y: { beginAtZero: true, ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
-                        x: { ticks: { color: '#fff', font: { size: 16, weight: 'bold' } }, grid: { display: false } }
+                        x: { ticks: { color: '#fff', font: { size: 14 } }, grid: { display: false } }
                     }
                 }
             });
