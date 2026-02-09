@@ -36,7 +36,7 @@
 1. Info, that you were too shy to ask
     1. Incognito
     1. Web inspector
-        1. Facebook - Do not insert any code
+        1. Facebook, ChatGPT->GoogleLogin - Do not insert any code
     1. IP address, IPv4 vs IPv6
         1. What can we find out (location...)
     1. MFA
@@ -90,7 +90,8 @@
 
 ## ToDo
 
-6. test EVERYTHING
+1. test EVERYTHING
     * on light theme
-7. all ports to 80 (except for QnA and qr generator)
-8. overall orchestration (QnA)
+1. all ports to 80 (except for QnA and qr generator)
+1. overall orchestration (QnA)
+1. admin passwords normal

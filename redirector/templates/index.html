@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Přesměrování...</title>
+    <style>
+        :root { --bg: #f8fafc; --text: #1e293b; --card: #ffffff; --accent: #6366f1; }
+        @media (prefers-color-scheme: dark) {
+            :root { --bg: #0f172a; --text: #f8fafc; --card: #1e293b; --accent: #818cf8; }
+        }
+        body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .card { background: var(--card); padding: 3rem; border-radius: 24px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.1); width: 90%; max-width: 500px; }
+        .loader { border: 4px solid rgba(0,0,0,0.1); border-top: 4px solid var(--accent); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .btn { display: inline-block; margin-top: 20px; padding: 12px 24px; background: var(--accent); color: white; text-decoration: none; border-radius: 12px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Přesměrovávám vás</h1>
+        <p>Za malý okamžik budete na cílové stránce.</p>
+        <div class="loader"></div>
+        <p style="font-size: 0.9rem; opacity: 0.7;">Pokud se nic neděje, klikněte níže:</p>
+        <a href="{{ target_url }}" id="manual-link" class="btn">Přejít na web</a>
+    </div>
+
+    <script>
+        // Okamžité přesměrování
+        window.location.href = "{{ target_url }}";
+    </script>
+</body>
+</html>
