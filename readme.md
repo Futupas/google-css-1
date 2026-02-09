@@ -114,3 +114,4 @@
     1. web inspector - new slide
     1. prestavka before "random fakt" -?
     1. GDPR - divide
+1. apache2 license
