@@ -4,10 +4,10 @@ services:
     build: .
     container_name: web_desktop
     ports:
-      - "6080:80"     # noVNC web interface (container 80 → host 6080)
-      - "8080:8080"   # Apache/PHP chat
-      - "8443:8443"   # Apache/PHP chat
-      - "5901:5901"   # optional VNC access
+      - "127.0.0.1:6080:80"     # noVNC web interface (container 80 → host 6080)
+      - "127.0.0.1:5901:5901"   # optional VNC access
+      - "80:8080"   # Apache/PHP chat
+      - "443:8443"   # Apache/PHP chat
     volumes:
       - ./www:/var/www/html  # your PHP chat files
       - ./apache2/ports.conf:/etc/apache2/ports.conf:ro
