@@ -95,4 +95,5 @@
 1. all ports to 80 (except for QnA and qr generator)
 1. overall orchestration (QnA)
 1. admin passwords normal
+1. real real & ai texts
 

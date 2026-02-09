@@ -1,0 +1,7 @@
+services:
+  ip-checker:
+    build: .
+    container_name: local_ip_checker
+    # Network mode host zajistí, že kontejner vidí 'ven' přímo
+    network_mode: host
+    restart: unless-stopped
