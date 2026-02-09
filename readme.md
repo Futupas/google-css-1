@@ -29,9 +29,10 @@
     1. [PRACTICE] OSINT - Personal data
         1. mozilla OSING
         1. haveibeenpwned
+        1. Story about that Tea application (related to OSINT)
 1. Lil break
-    1. Story about that Tea application (related to OSINT)
     1. Bluetooth hack Lukas showed
+    1. New What's Up vulnerability
     1. Show hackertyper
 1. Info, that you were too shy to ask
     1. Incognito
@@ -75,6 +76,7 @@
     * But can it run DOOM?
     * Worst examples (pwds on table etc)
 * curl https://ascii.live/rick
+* new whats up hack
 
 
 ## Practice examples
