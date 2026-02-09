@@ -3,7 +3,7 @@
 ## Script
 
 1. Intro
-    1. [PRACTICE] Google login fake page
+    1. Google login fake page
     1. [PRACTICE] Bad websites
     1. [PRACTICE] Fake links
     1. [PRACTICE] Letters fake ([IDN homograph attack](https://en.wikipedia.org/wiki/IDN_homograph_attack))
@@ -19,6 +19,9 @@
     1. [PRACTICE] HTTP/HTTPS
     1. WiFi - Evil twin
         1. This story about a guy from Australia in planes
+            * https://www.securityweek.com/australian-man-sentenced-to-prison-for-wi-fi-attacks-at-airports-and-on-flights/
+            * https://spaces.hightail.com/space/UhkbA21pLs/files
+            * https://spaces.hightail.com/space/OF1aC28xsM
     1. IoT hackable
     1. IoT with default password attack
         1. That story about IoT hack with default admin/admin password
@@ -35,7 +38,7 @@
     1. Web inspector
         1. Facebook - Do not insert any code
     1. IP address, IPv4 vs IPv6
-        1. What can we find out
+        1. What can we find out (location...)
     1. MFA
     1. [PRACTICE] If computer was stolen - BitLocker - show RPi
     1. Viruses - different kinds, how to secure yourself
@@ -47,6 +50,7 @@
         1. Know your rights
 1. AI
     1. Deepfakes
+        * Fake ad with Janek Rubes
     1. Process & Generate lots of data
     1. [PRACTICE] Can you find out which one was written by AI
     1. slop (videos) + protect older people
@@ -85,7 +89,6 @@
 1. AI texts
 
 ## ToDo
-5. qr code creator (local only)
 
 6. test EVERYTHING
     * on light theme
