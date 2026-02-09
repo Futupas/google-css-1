@@ -52,6 +52,7 @@
 1. AI
     1. Deepfakes
         * Fake ad with Janek Rubes
+        * Person that dont exist
     1. Process & Generate lots of data
     1. [PRACTICE] Can you find out which one was written by AI
     1. slop (videos) + protect older people
@@ -59,6 +60,8 @@
         1. Directly
         1. Indirectly (facebook, instagram)
     1. How to use properly
+    1. some kind of minister used AI which leaked
+        *. https://www.politico.com/news/2026/01/27/cisa-madhu-gottumukkala-chatgpt-00749361
 1. How to be safe (todo today)
 1. Q&A
 1. Feedback
@@ -98,4 +101,16 @@
 1. overall orchestration (QnA)
 1. admin passwords normal
 1. real real & ai texts
-
+1. check all the QR codes
+1. redirector - predefine all the websites
+1. highlight all the texts
+1. Presentation
+    1. Alex -> Oleksandr
+    1. Harm. attack - remove https
+    1. clovek slaby clanek - history about twitter (fern)
+    1. english on the title slide
+    1. practicals (how we do them) on title lide
+    1. nahodny fakt - new slide
+    1. web inspector - new slide
+    1. prestavka before "random fakt" -?
+    1. GDPR - divide
