@@ -1,0 +1,9 @@
+services:
+  php-server:
+    build: .
+    container_name: simple_mailer
+    ports:
+      - "80:80"
+    # volumes:
+    #   - .:/var/www/html
+    restart: unless-stopped

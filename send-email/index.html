@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send mail</title>
+    <style>
+        :root {
+            --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --border: #e2e8f0;
+            --primary: #6366f1; --primary-hover: #4f46e5;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --border: #334155;
+            }
+        }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg); color: var(--text);
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; margin: 0; padding: 20px;
+        }
+        .card {
+            background: var(--card); padding: 2rem; border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%; max-width: 500px; border: 1px solid var(--border);
+        }
+        h1 { margin: 0 0 1.5rem; font-size: 1.5rem; text-align: center; color: var(--primary); }
+        .field { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600; }
+        input, textarea {
+            width: 100%; padding: 12px; border: 1px solid var(--border);
+            border-radius: 10px; background: var(--bg); color: var(--text);
+            box-sizing: border-box; font-size: 1rem; outline: none; transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus { border-color: var(--primary); }
+        .checkbox-group { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        input[type="checkbox"] { width: auto; cursor: pointer; }
+        button {
+            width: 100%; padding: 14px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-size: 1rem; font-weight: bold;
+            cursor: pointer; transition: 0.2s; margin-top: 1rem;
+        }
+        button:hover { background: var(--primary-hover); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+        #status {
+            margin-top: 1.5rem; padding: 1rem; border-radius: 10px;
+            display: none; text-align: center; font-size: 0.9rem;
+        }
+        .success { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981; }
+        .error { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Odeslat Email</h1>
+    
+    <div class="field">
+        <label>Odesílatel (email)</label>
+        <input type="email" id="emailFrom" placeholder="email@priklad.cz" required />
+    </div>
+
+    <div class="field">
+        <label>Odesílatel (jméno)</label>
+        <input type="text" id="emailFromName" placeholder="Alex Pascal" required />
+    </div>
+    
+    <div class="field">
+        <label>Příjemce</label>
+        <input type="email" id="emailTo" placeholder="email@priklad.cz" required />
+    </div>
+
+    <div class="field">
+        <label>Předmět</label>
+        <input type="text" id="emailSubject" placeholder="Předmět zprávy" required />
+    </div>
+
+    <div class="field">
+        <label>Zpráva</label>
+        <textarea id="messageText" rows="4" placeholder="Vaše zpráva..."></textarea>
+    </div>
+
+    <label class="checkbox-group">
+        <input type="checkbox" id="isHtml" />
+        Poslat jako HTML (Fancy styl)
+    </label>
+
+    <button id="sendBtn" onclick="sendMail()">Odeslat Email</button>
+
+    <div id="status"></div>
+</div>
+
+<script>
+    async function sendMail() {
+        const btn = document.getElementById('sendBtn');
+        const status = document.getElementById('status');
+        
+        const data = {
+            emailFrom: document.getElementById('emailFrom').value,
+            emailFromName: document.getElementById('emailFromName').value,
+            emailTo: document.getElementById('emailTo').value,
+            emailSubject: document.getElementById('emailSubject').value,
+            messageText: document.getElementById('messageText').value,
+            isHtml: document.getElementById('isHtml').checked,
+        };
+
+        if (!data.emailTo || !data.emailSubject) {
+            alert('Vyplňte prosím příjemce a předmět.');
+            return;
+        }
+
+        // UI state
+        btn.disabled = true;
+        btn.innerText = 'Odesílám...';
+        status.style.display = 'none';
+
+        try {
+            const response = await fetch('/send-mail.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            status.style.display = 'block';
+            status.className = result.status === 'success' ? 'success' : 'error';
+            status.innerText = result.message || result.info;
+
+            if (result.status === 'success') {
+                document.getElementById('messageText').value = '';
+            }
+        } catch (e) {
+            status.style.display = 'block';
+            status.className = 'error';
+            status.innerText = 'Chyba spojení se serverem.';
+        } finally {
+            btn.disabled = false;
+            btn.innerText = 'Odeslat Email';
+        }
+    }
+</script>
+
+</body>
+</html>
