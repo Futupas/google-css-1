@@ -5,7 +5,7 @@ let font;
 // Load the font file. Using a WOFF2 file for efficiency.
 opentype.load('/arial.ttf', function(err, loadedFont) {
     if (err) {
-        document.getElementById('loader').textContent = 'Error loading font: ' + err;
+        document.getElementById('loader').textContent = 'Chyba při načítání písma: ' + err;
         return;
     }
     font = loadedFont;
@@ -61,7 +61,7 @@ function analyze() {
     console.clear();
 
     if (text1.length !== text2.length) {
-        messageDiv.textContent = "Texts have different lengths, cannot perform per-character analysis.";
+        messageDiv.textContent = "Texty mají různou délku, nelze provést analýzu po jednotlivých znacích.";
         document.getElementById('analysis-results-visual').style.display = 'none';
         document.getElementById('analysis-results-code').style.display = 'none';
         return;
@@ -98,7 +98,7 @@ function analyze() {
         visualComparisonDiv.classList.add('char-comparison');
         visualComparisonDiv.innerHTML = `
             <div class="chars"><b>${char1}</b><span> vs </span><b>${char2}</b></div>
-            <div class="similarity-percent">${visualSimilarity.toFixed(2)}% Similar</div>`;
+            <div class="similarity-percent">${visualSimilarity.toFixed(2)}% shoda</div>`;
         
         if (visualSimilarity === 100) visualComparisonDiv.classList.add('perfect-match');
         else if (visualSimilarity > 85) visualComparisonDiv.classList.add('high-similarity');
@@ -122,16 +122,16 @@ function analyze() {
         
         codeComparisonDiv.innerHTML = `
             <div class="chars"><b>${char1}</b><span> vs </span><b>${char2}</b></div>
-            <div class="similarity-percent">${codeSimilarity}% Match</div>`;
+            <div class="similarity-percent">${codeSimilarity}% shoda</div>`;
         gridCodeDiv.appendChild(codeComparisonDiv);
     }
     
     // Display overall results
     const avgVisualSimilarity = text1.length > 0 ? totalVisualSimilarity / text1.length : 0;
-    overallVisualDiv.innerHTML = `<strong>Average Visual Similarity: ${avgVisualSimilarity.toFixed(2)}%</strong>`;
+    overallVisualDiv.innerHTML = `<strong>Průměrná vizuální podobnost: ${avgVisualSimilarity.toFixed(2)}%</strong>`;
     
     const avgCodeSimilarity = text1.length > 0 ? (identicalChars / text1.length) * 100 : 0;
-    overallCodeDiv.innerHTML = `<strong>Average Code Similarity: ${avgCodeSimilarity.toFixed(2)}%</strong>`;
+    overallCodeDiv.innerHTML = `<strong>Průměrná shoda kódů: ${avgCodeSimilarity.toFixed(2)}%</strong>`;
 }
 
 document.getElementById('text1').addEventListener('input', analyze);

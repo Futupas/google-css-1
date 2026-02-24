@@ -3,49 +3,49 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Advanced Homograph Attack Demonstrator</title>
+    <title>Pokročilý demonstrátor homografického útoku</title>
     <link rel="stylesheet" href="/styles.css" />
     <!-- Import opentype.js library from a CDN -->
     <script src="https://cdn.jsdelivr.net/npm/opentype.js@latest/dist/opentype.min.js"></script>
 </head>
 <body>
 
-    <h1>Advanced Homograph Attack Demonstrator</h1>
+    <h1>Pokročilý demonstrátor homografického útoku</h1>
     
     <div style="text-align: center; margin-bottom: 20px;">
         <a href="https://futupas.github.io/homograph-attack-demonstrator/">futupas.github.io/homograph-attack-demonstrator</a>
     </div>
     
-    <div id="loader" class="loader">Loading Font...</div>
+    <div id="loader" class="loader">Načítání písma...</div>
 
     <div id="main-content" style="display: none;">
         <div class="container">
             <div class="box">
-                <label for="text1">Text 1 (e.g., Latin "a")</label>
+                <label for="text1">Text 1 (např. latinské „a“)</label>
                 <input type="text" id="text1" value="apple.com">
-                <h2>Character Codes</h2>
+                <h2>Kódy znaků</h2>
                 <div class="char-codes" id="char-codes1"></div>
             </div>
             <div class="box">
-                <label for="text2">Text 2 (e.g., Cyrillic "a")</label>
+                <label for="text2">Text 2 (např. cyrilské „a“)</label>
                 <input type="text" id="text2" value="аpple.com">
-                <h2>Character Codes</h2>
+                <h2>Kódy znaků</h2>
                 <div class="char-codes" id="char-codes2"></div>
             </div>
         </div>
 
         <div class="results">
-            <h2>Analysis</h2>
+            <h2>Analýza</h2>
             <div id="message" class="message"></div>
 
             <div id="analysis-results-visual">
-                <h3>Per-Character Visual Similarity (Vector Comparison)</h3>
+                <h3>Vizuální podobnost jednotlivých znaků (vektorové porovnání)</h3>
                 <div id="similarity-grid-visual" class="similarity-grid"></div>
                 <div id="overall-similarity-visual" class="overall-similarity"></div>
             </div>
 
             <div id="analysis-results-code">
-                <h3>Per-Character Code Comparison (Binary Match)</h3>
+                <h3>Porovnání kódů jednotlivých znaků (binární shoda)</h3>
                 <div id="similarity-grid-code" class="similarity-grid"></div>
                 <div id="overall-similarity-code" class="overall-similarity"></div>
             </div>
