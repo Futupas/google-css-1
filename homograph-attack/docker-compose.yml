@@ -4,7 +4,7 @@ services:
     image: httpd:latest
     container_name: apache_server
     ports:
-      - "8000:80"
+      - "80:80"
     volumes:
       - ./www:/usr/local/apache2/htdocs/
     restart: unless-stopped
