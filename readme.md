@@ -115,3 +115,10 @@
     1. prestavka before "random fakt" -?
     1. GDPR - divide
 1. apache2 license
+
+
+## Feedback
+
+Instead of using custom feedback i am going to use one of those (probably, panelq)
+* https://askqueue.com/
+* https://panelq.com/
