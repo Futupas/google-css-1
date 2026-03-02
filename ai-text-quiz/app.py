@@ -13,20 +13,69 @@ LABEL_LIMIT = 40  # Kolik znaků z textu se ukáže v popisku grafu
 
 # --- DATASET ---
 QUESTIONS = [
+    # {
+    #     "id": "Q1",
+    #     "options": [
+    #         {"text": "V hlubokém lese šeptá vítr staré příběhy. Listí stromů se jemně chvěje v nekonečném tanci světla a stínu, zatímco mechový koberec pod nohama tlumí každý krok.", "ai": False},
+    #         {"text": "Detekována anomálie v atmosférickém tlaku. Generování narativní struktury bylo dokončeno s vysokou mírou pravděpodobnosti úspěchu u cílové skupiny.", "ai": True}
+    #     ]
+    # },
+    # {
+    #     "id": "Q2",
+    #     "options": [
+    #         {"text": "Dnes ráno jsem vstal a uvědomil si, že jsem zapomněl vypnout kávovar. Ta vůně spálených zrn se táhla celým bytem jako nechtěná připomínka mé ranní roztržitosti.", "ai": False},
+    #         {"text": "Kávový extrakt byl připraven v souladu s nastavenými parametry teploty a tlaku. Systém zaznamenal překročení časového limitu ohřevu organických látek.", "ai": True}
+    #     ]
+    # },
     {
         "id": "Q1",
         "options": [
-            {"text": "V hlubokém lese šeptá vítr staré příběhy. Listí stromů se jemně chvěje v nekonečném tanci světla a stínu, zatímco mechový koberec pod nohama tlumí každý krok.", "ai": False},
-            {"text": "Detekována anomálie v atmosférickém tlaku. Generování narativní struktury bylo dokončeno s vysokou mírou pravděpodobnosti úspěchu u cílové skupiny.", "ai": True}
+            { "ai": False, "text": "Po studiích se stává knězem a odchází jako kaplan do Markova ke staršímu moudrému a laskavému knězi, kde prožívá šťastnou idylku. Zde setrvává několik let, dokonce i poté, co jeho někdejší spolužáci již odcházejí na svá první samostatná místa." },
+            { "ai": True,  "text": "Po atestaci se stává lékařem a nastupuje do venkovské nemocnice k postaršímu, trpělivému a zkušenému primáři, u něhož nachází klidnou praxi. Setrvává zde dlouhou dobu, a to i v době, kdy jeho vrstevníci z fakulty již usilují o vedoucí pozice na velkých pražských klinikách." },
         ]
     },
     {
         "id": "Q2",
         "options": [
-            {"text": "Dnes ráno jsem vstal a uvědomil si, že jsem zapomněl vypnout kávovar. Ta vůně spálených zrn se táhla celým bytem jako nechtěná připomínka mé ranní roztržitosti.", "ai": False},
-            {"text": "Kávový extrakt byl připraven v souladu s nastavenými parametry teploty a tlaku. Systém zaznamenal překročení časového limitu ohřevu organických látek.", "ai": True}
+            { "ai": False, "text": "Za čas, krátce po dokončení Jesliček, je poslán do důchodu. Důvodem je, mimo jiné, že zavádí do některých částí liturgie češtinu a že jím vyřezané Jesličky jsou „příliš lidové“. Je mu umožněno ještě u těchto Jesliček vést první pobožnost." },
+            { "ai": True,  "text": "Nedlouho po dokončení návrhu radnice je poslán na odpočinek. Hlavním důvodem je, že do konzervativního projektu vkládá moderní materiály a jeho pojetí fasády je prý „příliš odvážné“. Dostává však šanci osobně se zúčastnit slavnostního poklepání na základní kámen." },
         ]
-    }
+    },
+    {
+        "id": "Q3",
+        "options": [
+            { "ai": False, "text": "V roce 1462 Jiří vyslal poselstvo k novému papeži se slibem poslušnosti, ale též se žádostí o potvrzení basilejské úmluvy. Papež Pius II. však 31. března 1462 za přítomnosti českého poselstva basilejská kompaktáta zrušil." },
+            { "ai": True,  "text": "Na podzim roku 1938 vyslala vláda vyslance k mezinárodní komisi s ujištěním o spolupráci, leč zároveň s prosbou o garantování stávajících hranic. Mocnosti však na rozhodujícím zasedání v Mnichově za přítomnosti diplomatů veškeré předchozí záruky a dohody prohlásily za neplatné." },
+        ]
+    },
+    {
+        "id": "Q4",
+        "options": [
+            { "ai": False, "text": "Rokycana nejprve hlouček bratří, který se seskupil kolem Řehoře, podporoval a vyjednal jim možnost pobytu ve vsi Kunvaldu na králově zboží litickém. Brzy se však polekal věroučných novot, ke kterým bratří dospěli. Hlásali bratrství všech a považovali každý boj za veliký hřích." },
+            { "ai": True,  "text": "Starosta nejprve komunitu zahradníků, která se utvořila v opuštěném vnitrobloku, chránil a vyjednal jim legální pronájem obecních pozemků. Brzy se však polekal ideových novot, které skupina začala prosazovat. Odmítali jakýkoliv soukromý majetek a považovali každé sekání trávy za útok na planetu." },
+        ]
+    },
+    {
+        "id": "Q5",
+        "options": [
+            { "ai": False, "text": "Tento děj je doprovázen výjevy ze života poddaných. Znovu se setkáváme s Petrem, který se pilně věnuje práci v bratrském sboru, i s Noemi, manželkou pana Rychnovského. Dalším dějovým pásmem je příběh Němkyně Anny." },
+            { "ai": True,  "text": "Vyprávění je doprovázeno výjevy ze života měšťanů. Opět narážíme na Jakuba, který pilně pracuje v tkalcovském stavu, i na Marii, manželku mistra cechu. Dalším dějovým pásmem je osud osiřelé Kateřiny, která se snaží přežít v nelehkých časech po válce." },
+        ]
+    },
+    {
+        "id": "Q6",
+        "options": [
+            { "ai": False, "text": "Na třetím setkání se už ale Petr odhodlá a dá se s dívkou do hovoru. Začíná se rodit láska. Tráví spolu spousty času, Petr doprovází Lucii i do práce. Dívka se živí malováním a následně svá díla prodává, aby si vydělala na živobytí." },
+            { "ai": True,  "text": "Při páté procházce už se ale Martin sebere a dá se s dívkou do řeči. Začíná rozkvétat láska. Tráví spolu veškerý volný čas, Martin doprovází Annu i na trh. Dívka se živí vyšíváním ubrusů a následně své zboží nabízí měšťkám, aby si zajistila skromné živobytí." },
+        ]
+    },
+    {
+        "id": "Q7",
+        "options": [
+            { "ai": False, "text": "On the third trip Pip jumped again when a whale hit the boat. He was a young boy—a cook—not a whaler. He was afraid. This time Stubb left him in the ocean. “Please come back!” Pip shouted. “Please don't leave me! The sharks will eat me!”" },
+            { "ai": True,  "text": "During the fourth assault Thomas froze again when a shell hit the trench. He was a simple farmhand—a drummer—not a soldier. He was terrified. This time the Sergeant left him in the mud. “Wait for me!” Thomas screamed. “Please don't go! The enemy will find me!”" },
+        ]
+    },
 ]
 
 state = {
