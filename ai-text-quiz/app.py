@@ -30,8 +30,8 @@ QUESTIONS = [
     {
         "id": "Q1",
         "options": [
-            { "ai": False, "text": "Po studiích se stává knězem a odchází jako kaplan do Markova ke staršímu moudrému a laskavému knězi, kde prožívá šťastnou idylku. Zde setrvává několik let, dokonce i poté, co jeho někdejší spolužáci již odcházejí na svá první samostatná místa." },
             { "ai": True,  "text": "Po atestaci se stává lékařem a nastupuje do venkovské nemocnice k postaršímu, trpělivému a zkušenému primáři, u něhož nachází klidnou praxi. Setrvává zde dlouhou dobu, a to i v době, kdy jeho vrstevníci z fakulty již usilují o vedoucí pozice na velkých pražských klinikách." },
+            { "ai": False, "text": "Po studiích se stává knězem a odchází jako kaplan do Markova ke staršímu moudrému a laskavému knězi, kde prožívá šťastnou idylku. Zde setrvává několik let, dokonce i poté, co jeho někdejší spolužáci již odcházejí na svá první samostatná místa." },
         ]
     },
     {
@@ -44,15 +44,15 @@ QUESTIONS = [
     {
         "id": "Q3",
         "options": [
-            { "ai": False, "text": "V roce 1462 Jiří vyslal poselstvo k novému papeži se slibem poslušnosti, ale též se žádostí o potvrzení basilejské úmluvy. Papež Pius II. však 31. března 1462 za přítomnosti českého poselstva basilejská kompaktáta zrušil." },
             { "ai": True,  "text": "Na podzim roku 1938 vyslala vláda vyslance k mezinárodní komisi s ujištěním o spolupráci, leč zároveň s prosbou o garantování stávajících hranic. Mocnosti však na rozhodujícím zasedání v Mnichově za přítomnosti diplomatů veškeré předchozí záruky a dohody prohlásily za neplatné." },
+            { "ai": False, "text": "V roce 1462 Jiří vyslal poselstvo k novému papeži se slibem poslušnosti, ale též se žádostí o potvrzení basilejské úmluvy. Papež Pius II. však 31. března 1462 za přítomnosti českého poselstva basilejská kompaktáta zrušil." },
         ]
     },
     {
         "id": "Q4",
         "options": [
-            { "ai": False, "text": "Rokycana nejprve hlouček bratří, který se seskupil kolem Řehoře, podporoval a vyjednal jim možnost pobytu ve vsi Kunvaldu na králově zboží litickém. Brzy se však polekal věroučných novot, ke kterým bratří dospěli. Hlásali bratrství všech a považovali každý boj za veliký hřích." },
             { "ai": True,  "text": "Starosta nejprve komunitu zahradníků, která se utvořila v opuštěném vnitrobloku, chránil a vyjednal jim legální pronájem obecních pozemků. Brzy se však polekal ideových novot, které skupina začala prosazovat. Odmítali jakýkoliv soukromý majetek a považovali každé sekání trávy za útok na planetu." },
+            { "ai": False, "text": "Rokycana nejprve hlouček bratří, který se seskupil kolem Řehoře, podporoval a vyjednal jim možnost pobytu ve vsi Kunvaldu na králově zboží litickém. Brzy se však polekal věroučných novot, ke kterým bratří dospěli. Hlásali bratrství všech a považovali každý boj za veliký hřích." },
         ]
     },
     {
@@ -65,8 +65,8 @@ QUESTIONS = [
     {
         "id": "Q6",
         "options": [
-            { "ai": False, "text": "Na třetím setkání se už ale Petr odhodlá a dá se s dívkou do hovoru. Začíná se rodit láska. Tráví spolu spousty času, Petr doprovází Lucii i do práce. Dívka se živí malováním a následně svá díla prodává, aby si vydělala na živobytí." },
             { "ai": True,  "text": "Při páté procházce už se ale Martin sebere a dá se s dívkou do řeči. Začíná rozkvétat láska. Tráví spolu veškerý volný čas, Martin doprovází Annu i na trh. Dívka se živí vyšíváním ubrusů a následně své zboží nabízí měšťkám, aby si zajistila skromné živobytí." },
+            { "ai": False, "text": "Na třetím setkání se už ale Petr odhodlá a dá se s dívkou do hovoru. Začíná se rodit láska. Tráví spolu spousty času, Petr doprovází Lucii i do práce. Dívka se živí malováním a následně svá díla prodává, aby si vydělala na živobytí." },
         ]
     },
     {
